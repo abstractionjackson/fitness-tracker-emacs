@@ -1,0 +1,18 @@
+* Fitness Tracker for Emacs
+This package allows you to log and visualize your exercise progress.
+
+** Installation
+1. Clone the repository:
+   #+begin_src shell
+   git clone ~/fitness-tracker
+   #+end_src
+
+2. Load the package in Emacs:
+   #+begin_src emacs-lisp
+   (add-to-list 'load-path "~/fitness-tracker")
+   (require 'fitness)
+   #+end_src
+
+** Usage
+- Log an exercise: M-x fitness-capture-exercise
+- Generate a progress plot: M-x fitness-plot-exercise

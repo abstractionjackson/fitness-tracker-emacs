@@ -1,0 +1,3 @@
+#+NAME: Fitness-Log
+| Date       | Movement      | Weight | Sets | Reps |
+|------------+--------------+--------+------+------|
