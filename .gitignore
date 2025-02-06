@@ -1,0 +1,22 @@
+# Byte-compiled Lisp files
+*.elc
+
+# Emacs backup and auto-save files
+*~
+\#*#
+
+# Org-mode temporary files
+*.org~
+
+# Python compiled files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environment
+venv/
+.env/
+
+# Plot images
+lifting_progress.png
