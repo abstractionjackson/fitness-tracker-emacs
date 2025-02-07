@@ -1,19 +1,34 @@
 ;;; fitness-data.el --- Data Handling for Fitness Tracker -*- lexical-binding: t; -*-
 
-(defvar fitness-data-file "~/fitness.org"
-  "Path to the Org file storing fitness data.")
+(defvar fitness-db-file "~/fitness-tracker/fitness.sqlite3"
+  "Path to the SQLite database storing fitness data.")
 
-(defun fitness-data-save-entry (date movement weight sets reps)
-  "Save an exercise entry to the fitness tracking table."
-  (with-current-buffer (find-file-noselect fitness-data-file)
-    (goto-char (point-min))
-    (unless (search-forward "#+NAME: Fitness-Log" nil t)
-      (goto-char (point-max))
-      (insert "\n#+NAME: Fitness-Log\n| Date | Movement | Weight | Sets | Reps |\n|------|----------|--------|------|------|\n"))
-    (forward-line)
-    (while (org-at-table-p) (forward-line 1))
-    (insert (format "| %s | %s | %s | %s | %s |\n" date movement weight sets reps))
-    (org-table-align)
-    (save-buffer)))
+(defun init-db ()
+  "Initialize the database connection and create tables if they don't exist."
+  (let ((db (sqlite-open (expand-file-name fitness-db-file))))
+    (sqlite-execute db "CREATE TABLE IF NOT EXISTS exercises
+                       (id INTEGER PRIMARY KEY AUTOINCREMENT,
+                        date DATE NOT NULL,
+                        movement TEXT NOT NULL,
+                        weight NUMERIC NOT NULL,
+                        sets INTEGER NOT NULL,
+                        reps INTEGER NOT NULL)")
+    db))
 
+(defun save-exercise (date movement weight reps sets)
+  "Save a new exercise entry to the database."
+  (let ((db (init-db)))
+    (sqlite-execute db "INSERT INTO exercises (date, movement, weight, reps, sets)
+                       VALUES (?, ?, ?, ?, ?)"
+                   (list date movement weight reps sets))
+    (sqlite-close db)))
+
+(defun get-distinct-movements ()
+  "Retrieve a list of distinct movements from the database."
+  (let ((db (init-db)))
+    (let ((movements (sqlite-select db "SELECT DISTINCT movement FROM exercises")))
+      (sqlite-close db)
+      (mapcar 'car movements))))
+
+(init-db)
 (provide 'fitness-data)

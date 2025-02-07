@@ -20,3 +20,6 @@ venv/
 
 # Plot images
 lifting_progress.png
+
+# SQLite database
+*.sqlite3
