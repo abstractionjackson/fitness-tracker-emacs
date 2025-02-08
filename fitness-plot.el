@@ -1,57 +1,62 @@
-;;; fitness-data.el --- Data Handling for Fitness Tracker -*- lexical-binding: t; -*-
+;;; fitness-plot.el --- Visualization for Fitness Tracker -*- lexical-binding: t; -*-
 
 ;; Copyright (C) 2025 abstractionjackson
 
-;;; Commentary:
+;;; Commentary
 
-;; This file provides functions for handling fitness data, including
-;; initializing the database, saving exercise entries, and retrieving
-;; distinct movements.
+;; This file provides functions for generating fitness plots using an external Python script.
+;; It requires the 'fitness-data' package and sets up paths for the package directory,
+;; Python executable, and plot module.
 
-;;; Code:
+(require 'fitness-data)
 
-(defvar fitness-tracker-dir
-  (file-name-directory (or load-file-name buffer-file-name))
-  "Directory where the fitness-tracker package is installed.")
+;; Path to the package directory
+(defvar fitness-tracker-dir (file-name-directory (or load-file-name buffer-file-name)))
 
-(defvar fitness-db-file
-  (expand-file-name "fitness.sqlite3" fitness-tracker-dir)
-  "Path to the SQLite database storing fitness data.")
+;; Path to Python virtual environment
+(defvar fitness-tracker-venv-dir (expand-file-name ".venv" fitness-tracker-dir))
+(defvar fitness-tracker-venv-bin (expand-file-name "bin" fitness-tracker-venv-dir))
 
-(defun init-db ()
-  "Initialize the database connection and create tables if they don't exist."
-  ;; Ensure directory exists
-  (make-directory (file-name-directory fitness-db-file) t)
-  (let ((db (sqlite-open fitness-db-file)))
-    (sqlite-execute db "CREATE TABLE IF NOT EXISTS exercises
-                       (id INTEGER PRIMARY KEY AUTOINCREMENT,
-                        date DATE NOT NULL,
-                        movement TEXT NOT NULL,
-                        weight NUMERIC NOT NULL,
-                        sets INTEGER NOT NULL,
-                        reps INTEGER NOT NULL)")
-    ;; Add a test to verify table creation
-    (let ((table-check (sqlite-select db "SELECT name FROM sqlite_master WHERE type='table' AND name='exercises'")))
-      (unless table-check
-        (error "Failed to create exercises table")))
-    (sqlite-close db)
-    t)) ; Return true if successful
+;; Path to the python executable in venv
+(defvar fitness-tracker-python-executable
+  (expand-file-name
+   (if (eq system-type 'windows-nt) "python.exe" "python")
+   fitness-tracker-venv-bin))
 
-(defun save-exercise (date movement weight reps sets)
-  "Save a new exercise entry to the database."
-  (let ((db (sqlite-open fitness-db-file)))
-    (sqlite-execute db "INSERT INTO exercises (date, movement, weight, reps, sets)
-                       VALUES (?, ?, ?, ?, ?)"
-                   (list date movement weight reps sets))
-    (sqlite-close db)))
+;; Path to requirements.txt
+(defvar fitness-tracker-requirements
+  (expand-file-name "requirements.txt" fitness-tracker-dir))
 
-(defun get-distinct-movements ()
-  "Retrieve a list of distinct movements from the database."
-  (let ((db (sqlite-open fitness-db-file)))
-    (let ((movements (sqlite-select db "SELECT DISTINCT movement FROM exercises")))
-      (sqlite-close db)
-      (or (mapcar 'car movements) '()))))
+;; Path to the plot module
+(defvar fitness-tracker-plot-script
+  (expand-file-name "plot.py" fitness-tracker-dir))
 
-;; Remove the init-db call here since we're handling it in fitness-tracker.el
-(provide 'fitness-data)
-;;; fitness-data.el ends here
+(defun fitness-tracker-ensure-venv ()
+  "Ensure Python virtual environment exists and has required packages."
+  (unless (file-exists-p fitness-tracker-python-executable)
+    (message "Setting up Python virtual environment...")
+    (let ((default-directory fitness-tracker-dir))
+      ;; Create virtual environment
+      (call-process "python" nil nil t "-m" "venv" ".venv")
+
+      ;; Install requirements
+      (let ((pip (expand-file-name
+                 (if (eq system-type 'windows-nt)
+                     "Scripts/pip.exe"
+                   "bin/pip")
+                 fitness-tracker-venv-dir)))
+        (call-process pip nil nil t
+                     "install" "-r" fitness-tracker-requirements))
+      (message "Python environment setup complete!"))))
+
+(defun fitness-plot-generate ()
+  "Call the Python script to generate the exercise plot."
+  (interactive)
+  (fitness-tracker-ensure-venv)
+  (shell-command
+   (format "%s %s"
+           (shell-quote-argument fitness-tracker-python-executable)
+           (shell-quote-argument fitness-tracker-plot-script))))
+
+(provide 'fitness-plot)
+;;; fitness-plot.el ends here
