@@ -38,6 +38,6 @@
   "Generate a plot of the fitness data using Python."
   (interactive)
   (fitness-plot-generate)
-  (message "Plot generated! Check 'lifting_progress.png'."))
+  (message "Exercise Plot Complete"))
 
 (provide 'fitness)
