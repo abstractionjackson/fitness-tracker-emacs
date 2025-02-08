@@ -20,7 +20,12 @@ def get_exercises():
     return exercises
 
 def plot_exercises():
-    df = pd.DataFrame(data=get_exercises())
+    exercises = get_exercises()
+    if not exercises:
+        print("No exercise data found. Try logging some exercises first!")
+        return
+
+    df = pd.DataFrame(data=exercises)
     df.columns = ['id', 'date', 'movement', 'weight', 'sets', 'reps']
     df.sort_values(by='date', inplace=True)
     df['date'] = pd.to_datetime(df['date']).dt.strftime('%b %d')
