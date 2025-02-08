@@ -1,18 +1,56 @@
 * Fitness Tracker for Emacs
-This package allows you to log and visualize your exercise progress.
+
+A simple fitness tracking system for Emacs that allows you to log exercises and visualize your progress.
+
+** Requirements
+
+- Emacs 27.1 or later
+- Python 3.6 or later
+- SQLite3
 
 ** Installation
-1. Clone the repository:
-   #+begin_src shell
-   git clone ~/fitness-tracker
+
+*** Manual Installation
+
+1. Clone this repository:
+   #+begin_src bash
+   git clone https://github.com/abstractionjackson/fitness-tracker.git ~/.emacs.d/fitness-tracker
    #+end_src
 
-2. Load the package in Emacs:
-   #+begin_src emacs-lisp
-   (add-to-list 'load-path "~/fitness-tracker")
-   (require 'fitness)
+2. Add to your Emacs configuration:
+   #+begin_src elisp
+   (add-to-list 'load-path "~/.emacs.d/fitness-tracker")
+   (require 'fitness-tracker)
    #+end_src
+
+The package will automatically set up its Python environment on first use.
 
 ** Usage
-- Log an exercise: M-x fitness-capture-exercise
-- Generate a progress plot: M-x fitness-plot-exercise
+
+*** Interactive Commands
+
+- =M-x fitness-capture-exercise= :: Log a new exercise
+- =M-x fitness-plot-exercise= :: Generate a plot of your progress
+
+*** Data Storage
+
+Exercise data is stored in a SQLite database at =~/fitness-tracker/fitness.sqlite3=.
+
+** Features
+
+- Log exercises with date, movement, weight, sets, and reps
+- Auto-completion for previously used movements
+- Visual progress tracking with matplotlib plots
+- Automatic Python environment setup
+
+** Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+** License
+
+This project is licensed under the GPL-3.0 License - see the LICENSE file for details.
+
+** Author
+
+Jackson Galan <jacksongalan@gmail.com>

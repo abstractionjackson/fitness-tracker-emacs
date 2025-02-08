@@ -1,4 +1,10 @@
-;;; fitness.el --- Simple Fitness Tracker for Emacs -*- lexical-binding: t; -*-
+;;; fitness-ui.el --- Fitness tracking commands -*- lexical-binding: t; -*-
+
+;; Copyright (C) 2025 abstractionjackson
+
+;;; Commentary:
+
+;; Provides commands for logging exercises and generating plots.
 
 (require 'fitness-data)
 (require 'fitness-plot)
@@ -40,4 +46,5 @@
   (fitness-plot-generate)
   (message "Exercise Plot Complete"))
 
-(provide 'fitness)
+(provide 'fitness-ui)
+;;; fitness-ui.el ends here

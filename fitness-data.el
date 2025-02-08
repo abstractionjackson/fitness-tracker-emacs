@@ -1,11 +1,26 @@
 ;;; fitness-data.el --- Data Handling for Fitness Tracker -*- lexical-binding: t; -*-
 
-(defvar fitness-db-file "~/fitness-tracker/fitness.sqlite3"
+;; Copyright (C) 2025 abstractionjackson
+
+;;; Commentary
+
+;; This file provides functions for handling fitness data, including
+;; initializing the database, saving exercise entries, and retrieving
+;; distinct movements.
+
+(defvar fitness-tracker-dir
+  (file-name-directory (or load-file-name buffer-file-name))
+  "Directory where the fitness-tracker package is installed.")
+
+(defvar fitness-db-file
+  (expand-file-name "fitness.sqlite3" fitness-tracker-dir)
   "Path to the SQLite database storing fitness data.")
 
 (defun init-db ()
   "Initialize the database connection and create tables if they don't exist."
-  (let ((db (sqlite-open (expand-file-name fitness-db-file))))
+  ;; Ensure directory exists
+  (make-directory (file-name-directory fitness-db-file) t)
+  (let ((db (sqlite-open fitness-db-file)))
     (sqlite-execute db "CREATE TABLE IF NOT EXISTS exercises
                        (id INTEGER PRIMARY KEY AUTOINCREMENT,
                         date DATE NOT NULL,
@@ -32,3 +47,4 @@
 
 (init-db)
 (provide 'fitness-data)
+;;; fitness-data.el ends here
