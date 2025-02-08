@@ -2,7 +2,7 @@
 
 ;; Copyright (C) 2025 abstractionjackson
 
-;;; Commentary
+;;; Commentary:
 
 ;; This file provides functions for handling fitness data, including
 ;; initializing the database, saving exercise entries, and retrieving

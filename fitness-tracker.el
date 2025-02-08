@@ -6,7 +6,7 @@
 ;; Version: 1.0
 ;; Package-Requires: ((emacs "27.1") (sqlite3 "0.1"))
 ;; Keywords: tools
-;; URL: https://github.com/abstractionjacson/fitness-tracker-emacs
+;; URL: https://github.com/abstractionjackson/fitness-tracker-emacs
 
 ;;; Commentary:
 
@@ -19,7 +19,7 @@
 (require 'fitness-plot)
 (require 'fitness-ui)
 
-;;defgroup fitness-tracker nil
+(defgroup fitness-tracker nil
   "A simple fitness tracking system."
   :group 'applications)
 
