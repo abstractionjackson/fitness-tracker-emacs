@@ -5,7 +5,7 @@
 
 ;; Author: Jackson Galan <jacksongalan@gmail.com>
 ;; Version: 1.0
-;; Package-Requires: ((emacs "27.1") (sqlite3 "0.1"))
+;; Package-Requires: ((emacs "29.1"))
 ;; Keywords: tools
 ;; URL: https://github.com/abstractionjackson/fitness-tracker-emacs
 

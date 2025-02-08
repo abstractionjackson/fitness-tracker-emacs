@@ -10,8 +10,6 @@
 
 ;;; Code:
 
-(require 'sqlite3)
-
 (defvar fitness-tracker-dir
   (file-name-directory (or load-file-name buffer-file-name))
   "Directory where the fitness-tracker package is installed.")

@@ -4,9 +4,8 @@ A simple fitness tracking system for Emacs that allows you to log exercises and 
 
 ** Requirements
 
-- Emacs 27.1 or later
+- Emacs 29.1 or later
 - Python 3.6 or later
-- SQLite3
 
 ** Installation
 
@@ -53,4 +52,4 @@ This project is licensed under the GPL-3.0 License - see the LICENSE file for de
 
 ** Author
 
-Jackson Galan <jacksongalan@gmail.com>
+Jackson Galan
