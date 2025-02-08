@@ -14,7 +14,7 @@ A simple fitness tracking system for Emacs that allows you to log exercises and 
 
 1. Clone this repository:
    #+begin_src bash
-   git clone https://github.com/abstractionjackson/fitness-tracker.git ~/.emacs.d/fitness-tracker
+   git clone https://github.com/abstractionjackson/fitness-tracker-emacs.git ~/.emacs.d/fitness-tracker-emacs
    #+end_src
 
 2. Add to your Emacs configuration:
