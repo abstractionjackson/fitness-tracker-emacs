@@ -10,6 +10,7 @@ from pathlib import Path
 # Get the directory where plot.py is located
 PACKAGE_DIR = Path(__file__).parent.absolute()
 DB_PATH = os.path.join(PACKAGE_DIR, "fitness.sqlite3")
+PLOT_FPATH = os.path.join(PACKAGE_DIR, "fitness_plot.png")
 
 def get_exercises():
     conn = sqlite3.connect(DB_PATH)
@@ -31,8 +32,17 @@ def plot_exercises():
     df['date'] = pd.to_datetime(df['date']).dt.strftime('%b %d')
     df['Total Reps'] = df['sets'] * df['reps']
     df['Movement'] = df['movement']
+
+    # Create the plot
+    plt.figure(figsize=(10, 6))
     sns.scatterplot(data=df, x='date', y='weight', size='Total Reps', hue='Movement')
-    plt.show()
+    plt.xticks(rotation=45)
+    plt.tight_layout()
+
+    # Save the plot
+    plt.savefig(PLOT_FPATH)
+    plt.close()
+    return True
 
 if __name__ == '__main__':
     plot_exercises()

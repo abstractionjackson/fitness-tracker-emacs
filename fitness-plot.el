@@ -31,6 +31,20 @@
 (defvar fitness-tracker-plot-script
   (expand-file-name "plot.py" fitness-tracker-dir))
 
+(defun fitness-plot-display ()
+  "Display the fitness plot in a buffer."
+  (let ((buffer (get-buffer-create "*Fitness Plot*")))
+    (with-current-buffer buffer
+      (let ((inhibit-read-only t))
+        (erase-buffer)
+        (if (file-exists-p fitness-tracker-plot-file)
+            (progn
+              (insert-image (create-image fitness-tracker-plot-file))
+              (image-mode)
+              (read-only-mode 1))
+          (insert "No plot available. Try logging some exercises first."))))
+    (switch-to-buffer buffer)))
+
 (defun fitness-tracker-ensure-venv ()
   "Ensure Python virtual environment exists and has required packages."
   (unless (file-exists-p fitness-tracker-python-executable)
@@ -50,13 +64,17 @@
       (message "Python environment setup complete!"))))
 
 (defun fitness-plot-generate ()
-  "Call the Python script to generate the exercise plot."
+  "Generate and display the fitness plot."
   (interactive)
   (fitness-tracker-ensure-venv)
-  (shell-command
-   (format "%s %s"
-           (shell-quote-argument fitness-tracker-python-executable)
-           (shell-quote-argument fitness-tracker-plot-script))))
+  (let ((plot-success
+         (= 0 (shell-command
+               (format "%s %s"
+                      (shell-quote-argument fitness-tracker-python-executable)
+                      (shell-quote-argument fitness-tracker-plot-script))))))
+    (if plot-success
+        (fitness-plot-display)
+      (message "Failed to generate plot. Check if you have exercise data logged."))))
 
 (provide 'fitness-plot)
 ;;; fitness-plot.el ends here
