@@ -41,10 +41,11 @@
       (message "Invalid input: Please check all fields are filled correctly"))))
 
 (defun fitness-plot-exercise ()
-  "Generate a plot of the fitness data using Python."
+  "Generate and display a plot of the fitness data."
   (interactive)
-  (fitness-plot-generate)
-  (message "Exercise Plot Complete"))
+  (if (fitness-plot-generate)  ; Call generate and check return value
+      (fitness-plot-display)   ; Display if generation successful
+    (message "Failed to generate plot. Check if you have exercise data logged.")))
 
 (provide 'fitness-ui)
 ;;; fitness-ui.el ends here

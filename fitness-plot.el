@@ -64,17 +64,12 @@
       (message "Python environment setup complete!"))))
 
 (defun fitness-plot-generate ()
-  "Generate and display the fitness plot."
-  (interactive)
+  "Generate the fitness plot.
+Returns t if successful, nil otherwise."
   (fitness-tracker-ensure-venv)
-  (let ((plot-success
-         (= 0 (shell-command
-               (format "%s %s"
-                      (shell-quote-argument fitness-tracker-python-executable)
-                      (shell-quote-argument fitness-tracker-plot-script))))))
-    (if plot-success
-        (fitness-plot-display)
-      (message "Failed to generate plot. Check if you have exercise data logged."))))
+  (= 0 (shell-command
+        (format "%s %s"
+               (shell-quote-argument fitness-tracker-python-executable)
+               (shell-quote-argument fitness-tracker-plot-script)))))
 
-(provide 'fitness-plot)
 ;;; fitness-plot.el ends here
