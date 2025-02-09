@@ -72,4 +72,5 @@ Returns t if successful, nil otherwise."
                (shell-quote-argument fitness-tracker-python-executable)
                (shell-quote-argument fitness-tracker-plot-script)))))
 
+(provide 'fitness-plot)
 ;;; fitness-plot.el ends here
