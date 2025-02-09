@@ -8,6 +8,8 @@
 ;; It requires the 'fitness-data' package and sets up paths for the package directory,
 ;; Python executable, and plot module.
 
+;;; Code:
+
 (require 'fitness-data)
 
 ;; Path to the package directory
@@ -27,23 +29,13 @@
 (defvar fitness-tracker-requirements
   (expand-file-name "requirements.txt" fitness-tracker-dir))
 
-;; Path to the plot module
+;; Path to the plot module and output file
 (defvar fitness-tracker-plot-script
   (expand-file-name "plot.py" fitness-tracker-dir))
 
-(defun fitness-plot-display ()
-  "Display the fitness plot in a buffer."
-  (let ((buffer (get-buffer-create "*Fitness Plot*")))
-    (with-current-buffer buffer
-      (let ((inhibit-read-only t))
-        (erase-buffer)
-        (if (file-exists-p fitness-tracker-plot-file)
-            (progn
-              (insert-image (create-image fitness-tracker-plot-file))
-              (image-mode)
-              (read-only-mode 1))
-          (insert "No plot available. Try logging some exercises first."))))
-    (switch-to-buffer buffer)))
+(defvar fitness-tracker-plot-file
+  (expand-file-name "fitness_plot.png" fitness-tracker-dir)
+  "Path to the generated plot image file.")
 
 (defun fitness-tracker-ensure-venv ()
   "Ensure Python virtual environment exists and has required packages."
@@ -71,6 +63,20 @@ Returns t if successful, nil otherwise."
         (format "%s %s"
                (shell-quote-argument fitness-tracker-python-executable)
                (shell-quote-argument fitness-tracker-plot-script)))))
+
+(defun fitness-plot-display ()
+  "Display the fitness plot in a buffer."
+  (let ((buffer (get-buffer-create "*Fitness Plot*")))
+    (with-current-buffer buffer
+      (let ((inhibit-read-only t))
+        (erase-buffer)
+        (if (file-exists-p fitness-tracker-plot-file)
+            (progn
+              (insert-image (create-image fitness-tracker-plot-file))
+              (image-mode)
+              (read-only-mode 1))
+          (insert "No plot available. Try logging some exercises first."))))
+    (switch-to-buffer buffer)))
 
 (provide 'fitness-plot)
 ;;; fitness-plot.el ends here
